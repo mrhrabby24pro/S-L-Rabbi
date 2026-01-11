@@ -4,9 +4,6 @@ import { GoogleGenAI } from "@google/genai";
 import { FinancialState } from '../types';
 import { 
   Lightbulb, 
-  ChevronRight, 
-  ArrowUpCircle, 
-  CheckCircle2, 
   Loader2, 
   Compass, 
   ShieldCheck, 
@@ -29,7 +26,7 @@ const StrategySection: React.FC<StrategySectionProps> = ({ state }) => {
       const prompt = `
         আর্থিক ডাটা:
         ব্যালেন্স: ৳${state.bankBalance}
-        ঋণ: ${state.liabilities.map(l => `${l.title} (৳${l.amount})`).join(', ')}
+        ঋণ: ${state.liabilities.map(l => `${l.title} (বাকি ৳${l.totalAmount - l.paidAmount})`).join(', ')}
         লক্ষ্যমাত্রা: ${state.goals.map(g => `${g.title} (টার্গেট ৳${g.targetAmount}, জমা ৳${g.currentAmount})`).join(', ')}
 
         এই ডাটার উপর ভিত্তি করে:
@@ -60,7 +57,6 @@ const StrategySection: React.FC<StrategySectionProps> = ({ state }) => {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* AI Strategy Hero */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
           <Compass size={120} className="text-indigo-400" />
@@ -98,11 +94,10 @@ const StrategySection: React.FC<StrategySectionProps> = ({ state }) => {
         </div>
       </div>
 
-      {/* Core Principles Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-indigo-500/30 transition group">
           <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500 mb-4 group-hover:scale-110 transition">
-            <CheckCircle2 size={24} />
+            <ShieldCheck size={24} />
           </div>
           <h4 className="text-white font-bold mb-2">৫টেপ মেথড</h4>
           <p className="text-slate-500 text-sm">সবার আগে সব ঋণ তালিকাভুক্ত করুন এবং ছোট থেকে শুরু করুন।</p>
@@ -116,37 +111,10 @@ const StrategySection: React.FC<StrategySectionProps> = ({ state }) => {
         </div>
         <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 hover:border-indigo-500/30 transition group">
           <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500 mb-4 group-hover:scale-110 transition">
-            <ArrowUpCircle size={24} />
+            <TrendingUp size={24} />
           </div>
           <h4 className="text-white font-bold mb-2">অটোমেটেড সেভিংস</h4>
           <p className="text-slate-500 text-sm">আয় হওয়ার সাথে সাথে একটি নির্দিষ্ট অংশ সঞ্চয় অ্যাকাউন্টে পাঠিয়ে দিন।</p>
-        </div>
-      </div>
-
-      {/* Strategy Methods Info */}
-      <div className="bg-indigo-600/5 border border-indigo-500/20 rounded-3xl p-8">
-        <h4 className="text-white font-bold mb-6 flex items-center gap-2">
-          <Lightbulb className="text-amber-400" /> জনপ্রিয় ঋণ পরিশোধের পদ্ধতি
-        </h4>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-3">
-            <h5 className="text-indigo-400 font-bold flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-[10px] text-indigo-400">01</span>
-              ডেবট স্নোবল (Debt Snowball)
-            </h5>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              সবার আগে সবচেয়ে ছোট ঋণটি পরিশোধ করুন। এতে আপনার মনে আত্মবিশ্বাস জন্মাবে এবং পরবর্তী ঋণের জন্য গতি বাড়বে। এটি মানসিক শান্তির জন্য সেরা।
-            </p>
-          </div>
-          <div className="space-y-3">
-            <h5 className="text-indigo-400 font-bold flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-indigo-500/20 flex items-center justify-center text-[10px] text-indigo-400">02</span>
-              ডেবট অ্যাভালাঞ্চ (Debt Avalanche)
-            </h5>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              সবার আগে সর্বোচ্চ সুদের হারের ঋণটি পরিশোধ করুন। গাণিতিকভাবে এটি আপনাকে সবচেয়ে বেশি অর্থ সাশ্রয় করতে সাহায্য করবে।
-            </p>
-          </div>
         </div>
       </div>
     </div>

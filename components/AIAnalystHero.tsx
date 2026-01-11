@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { FinancialState } from '../types';
-import { BrainCircuit, Loader2, Sparkles, TrendingUp, RefreshCcw } from 'lucide-react';
+import { BrainCircuit, Loader2, Sparkles, RefreshCcw } from 'lucide-react';
 
 interface AIAnalystHeroProps {
   state: FinancialState;
@@ -21,10 +21,12 @@ const AIAnalystHero: React.FC<AIAnalystHeroProps> = ({ state }) => {
         `${t.note}: ${t.amount} (${t.type === 'income' ? 'আয়' : 'ব্যয়'})`
       ).join(', ');
 
+      const totalDebt = state.liabilities.reduce((s, l) => s + (l.totalAmount - l.paidAmount), 0);
+
       const prompt = `
         আর্থিক ডাটা বিশ্লেষণ করুন:
         ব্যালেন্স: ৳${state.bankBalance}
-        ঋণ: ৳${state.liabilities.reduce((s, l) => s + l.amount, 0)}
+        অবশিষ্ট ঋণ: ৳${totalDebt}
         সাম্প্রতিক লেনদেন: ${recentTransactions}
         লক্ষ্যমাত্রা: ${state.goals.length}টি সেট করা আছে।
 
@@ -52,7 +54,6 @@ const AIAnalystHero: React.FC<AIAnalystHeroProps> = ({ state }) => {
 
   return (
     <div className="relative group overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950/30 to-slate-900 border border-indigo-500/20 rounded-3xl p-6 mb-8 shadow-2xl">
-      {/* Background Glow Effect */}
       <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-600/10 blur-[100px] rounded-full group-hover:bg-indigo-600/20 transition-all duration-700"></div>
       
       <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -88,7 +89,6 @@ const AIAnalystHero: React.FC<AIAnalystHeroProps> = ({ state }) => {
         </button>
       </div>
 
-      {/* Stats Quick View Bottom Row */}
       <div className="mt-6 pt-6 border-t border-slate-800/50 flex flex-wrap gap-8">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-emerald-500"></div>

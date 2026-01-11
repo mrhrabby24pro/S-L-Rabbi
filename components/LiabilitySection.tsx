@@ -12,31 +12,36 @@ const LiabilitySection: React.FC<LiabilitySectionProps> = ({ liabilities, onDele
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {liabilities.map(l => (
-          <div key={l.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between group">
-            <div className="flex items-center gap-4">
-              <div className={`p-3 rounded-xl ${l.type === 'loan' ? 'bg-amber-500/10 text-amber-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                {l.type === 'loan' ? <Landmark size={24} /> : <ShieldAlert size={24} />}
+        {liabilities.map(l => {
+          const remaining = l.totalAmount - l.paidAmount;
+          return (
+            <div key={l.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex items-center justify-between group">
+              <div className="flex items-center gap-4">
+                <div className={`p-3 rounded-xl ${l.type === 'loan' ? 'bg-amber-500/10 text-amber-500' : 'bg-rose-500/10 text-rose-500'}`}>
+                  {l.type === 'loan' ? <Landmark size={24} /> : <ShieldAlert size={24} />}
+                </div>
+                <div>
+                  <h4 className="text-white font-bold">{l.title}</h4>
+                  <p className="text-slate-500 text-[10px] uppercase tracking-wider">
+                    {l.type === 'loan' ? 'ব্যাংক ঋণ' : l.type === 'special' ? 'বিশেষ দেনা' : 'ব্যক্তিগত দায়'}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-white font-bold">{l.title}</h4>
-                <p className="text-slate-500 text-xs uppercase tracking-tight">{l.type === 'loan' ? 'ব্যাংক ঋণ' : 'ব্যক্তিগত দায়'}</p>
+              <div className="flex items-center gap-6">
+                <div className="text-right">
+                  <span className="text-xl font-bold text-white block">৳ {remaining.toLocaleString('bn-BD')}</span>
+                  <span className="text-slate-500 text-[10px] italic">বাকি আছে</span>
+                </div>
+                <button 
+                  onClick={() => onDelete(l.id)}
+                  className="p-2 text-slate-700 hover:text-rose-500 transition opacity-0 group-hover:opacity-100"
+                >
+                  <Trash2 size={20} />
+                </button>
               </div>
             </div>
-            <div className="flex items-center gap-6">
-              <div className="text-right">
-                <span className="text-xl font-bold text-white block">৳ {l.amount.toLocaleString('bn-BD')}</span>
-                <span className="text-slate-500 text-xs italic">পরিশোধের জন্য অপেক্ষমাণ</span>
-              </div>
-              <button 
-                onClick={() => onDelete(l.id)}
-                className="p-2 text-slate-700 hover:text-rose-500 transition opacity-0 group-hover:opacity-100"
-              >
-                <Trash2 size={20} />
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {liabilities.length === 0 && (
